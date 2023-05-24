@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsecaseProxy } from 'src/infrastructure/usecases-proxy/usecase-proxy';
@@ -14,9 +15,10 @@ import {
   AddTodoUseCases,
   GetTodoUseCases,
   GetTodosUseCases,
+  UpdateTodoUseCases,
 } from 'src/usecases/todo';
 import { TodoPresenter } from './todo.presenter';
-import { AddTodoDto } from './dto';
+import { AddTodoDto, UpdateTodoDto } from './todo.dto';
 
 @Controller('todos')
 @ApiTags('todos')
@@ -32,6 +34,9 @@ export class TodoController {
 
     @Inject(UseCasesProxyModule.POST_TODO_USECASES_PROXY)
     private readonly addTodosUsecaseProxy: UsecaseProxy<AddTodoUseCases>,
+
+    @Inject(UseCasesProxyModule.PUT_TODO_USECASES_PROXY)
+    private readonly updateTodoUseCaseProxy: UsecaseProxy<UpdateTodoUseCases>,
   ) {}
 
   @Get()
@@ -55,5 +60,12 @@ export class TodoController {
     const todo = await this.addTodosUsecaseProxy.getInstance().execute(content);
 
     return new TodoPresenter(todo);
+  }
+
+  @Put()
+  async updateTodo(@Body() updateTodoDto: UpdateTodoDto) {
+    const { id, isDone } = updateTodoDto;
+
+    await this.updateTodoUseCaseProxy.getInstance().execute(id, isDone);
   }
 }
