@@ -5,7 +5,13 @@ import { ExceptionsModule } from '../exceptions/exceptions.module';
 import { DatabaseTodoRepository } from '../repositories/todo.repository';
 import { UsecaseProxy } from './usecase-proxy';
 import { LoggerService } from '../logger/logger.service';
-import { AddTodoUseCases, GetTodoUseCases } from 'src/usecases/todo';
+import {
+  AddTodoUseCases,
+  DeleteTodoUseCases,
+  GetTodoUseCases,
+  GetTodosUseCases,
+  UpdateTodoUseCases,
+} from 'src/usecases/todo';
 
 @Module({
   imports: [LoggerModule, RepositoriesModule, ExceptionsModule],
@@ -35,6 +41,31 @@ export class UseCasesProxyModule {
           provide: UseCasesProxyModule.GET_TODO_USECASES_PROXY,
           useFactory: (todoRepository: DatabaseTodoRepository) =>
             new UsecaseProxy(new GetTodoUseCases(todoRepository)),
+        },
+
+        {
+          inject: [DatabaseTodoRepository],
+          provide: UseCasesProxyModule.GET_TODOS_USECASES_PROXY,
+          useFactory: (todoRepository: DatabaseTodoRepository) =>
+            new UsecaseProxy(new GetTodosUseCases(todoRepository)),
+        },
+
+        {
+          inject: [DatabaseTodoRepository, LoggerService],
+          provide: UseCasesProxyModule.PUT_TODO_USECASES_PROXY,
+          useFactory: (
+            todoRepository: DatabaseTodoRepository,
+            logger: LoggerService,
+          ) => new UsecaseProxy(new UpdateTodoUseCases(todoRepository, logger)),
+        },
+
+        {
+          inject: [DatabaseTodoRepository, LoggerService],
+          provide: UseCasesProxyModule.DELETE_TODO_USECASES_PROXY,
+          useFactory: (
+            todoRepository: DatabaseTodoRepository,
+            logger: LoggerService,
+          ) => new UsecaseProxy(new DeleteTodoUseCases(todoRepository, logger)),
         },
       ],
       exports: [UseCasesProxyModule.POST_TODO_USECASES_PROXY],

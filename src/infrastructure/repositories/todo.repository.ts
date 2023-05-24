@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { TodoM } from 'src/domain/models';
-import { Todo } from '../entities';
-import { Repository } from 'typeorm';
 import { ITodoRepository } from 'src/domain/repositories';
 
 @Injectable()
