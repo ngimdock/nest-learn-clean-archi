@@ -2,6 +2,6 @@ export class TodoM {
   id: number;
   content: string;
   isDone: boolean;
-  createdate: Date;
-  updateddate: Date;
+  createdDate: Date;
+  updatedDate: Date;
 }

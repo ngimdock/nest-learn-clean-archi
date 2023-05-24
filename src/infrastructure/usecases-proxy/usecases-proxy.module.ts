@@ -68,7 +68,13 @@ export class UseCasesProxyModule {
           ) => new UsecaseProxy(new DeleteTodoUseCases(todoRepository, logger)),
         },
       ],
-      exports: [UseCasesProxyModule.POST_TODO_USECASES_PROXY],
+      exports: [
+        UseCasesProxyModule.POST_TODO_USECASES_PROXY,
+        UseCasesProxyModule.GET_TODO_USECASES_PROXY,
+        UseCasesProxyModule.GET_TODOS_USECASES_PROXY,
+        UseCasesProxyModule.POST_TODO_USECASES_PROXY,
+        UseCasesProxyModule.DELETE_TODO_USECASES_PROXY,
+      ],
     };
   }
 }
